@@ -217,7 +217,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34439d7125acc034a88d9e3bf28f1db4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravityScale: 1
+  gravityScale: 5
   simulatedParticles:
   - {fileID: 11400000, guid: 8cca18420fa3ad9488e938c4f5961c46, type: 2}
   - {fileID: 11400000, guid: 3d95cee5b0602094f8465c62412756fc, type: 2}

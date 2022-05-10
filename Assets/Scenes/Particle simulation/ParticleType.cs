@@ -14,7 +14,7 @@ public abstract class ParticleType : ScriptableObject
     protected void ApplyGravity(Particle p) {
         p.vY -= simulation.gravityScale;
         int sign = (int)Mathf.Sign(p.vY);
-        for (int i = 1; i < Mathf.Abs(p.vY); i ++) {
+        for (int i = 1; i < Mathf.Abs(p.vY) + 1; i ++) {
 
             int dY = sign * i;
             if (!simulation.IsPositionValid(p.x, p.y + dY)) {
