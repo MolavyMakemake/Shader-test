@@ -6,6 +6,7 @@ using UnityEngine;
 public class Simulation : MonoBehaviour
 {
     [SerializeField] public short gravityScale;
+    [SerializeField, Min(1)] int updatesPerSecond = 24;
     [SerializeField] ParticleType[] simulatedParticles;
     [SerializeField, Range(1, ushort.MaxValue)] public int width = 100;
     [SerializeField, Range(1, ushort.MaxValue)] public int height = 100;
@@ -17,8 +18,10 @@ public class Simulation : MonoBehaviour
     Texture2D texture;
 
 
-    void FixedUpdate()
+    void SimulationStep()
     {
+        input.ReadInput();
+
         Color[] color = new Color[width * height];
 
 
@@ -37,6 +40,10 @@ public class Simulation : MonoBehaviour
         texture.Apply(false);
     }
     
+    void Start() {
+        InvokeRepeating("SimulationStep", 0, 1f / updatesPerSecond);
+    }
+
     void OnEnable() {
         isOccupied = new bool[width, height];
         
