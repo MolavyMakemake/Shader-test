@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Particles/Water")]
 public class Water : ParticleType
 {
-    [SerializeField, Min(0)] float spread = 5;
+    [SerializeField, Min(0)] int spread = 5;
 
     public override void PhysicsStep(Particle p)
     {
@@ -20,11 +20,13 @@ public class Water : ParticleType
             p.x ++;
             p.y --;
         }
-        else if (simulation.IsPositionValid(p.x - 1, p.y)) {
-            p.x --;
-        }
-        else if (simulation.IsPositionValid(p.x + 1, p.y)) {
-            p.x ++;
+
+
+        else {
+            int spaceLeft = DistanceX(p, -spread);
+            int spaceRight = DistanceX(p, spread);
+            
+            p.x += (ushort)(-spaceLeft > spaceRight ? spaceLeft : spaceRight);
         }
     }
 }

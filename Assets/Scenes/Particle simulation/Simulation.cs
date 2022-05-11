@@ -7,36 +7,20 @@ public class Simulation : MonoBehaviour
 {
     [SerializeField] public short gravityScale;
     [SerializeField] ParticleType[] simulatedParticles;
-    [SerializeField, Range(1, ushort.MaxValue)] int width = 100;
-    [SerializeField, Range(1, ushort.MaxValue)] int height = 100;
+    [SerializeField, Range(1, ushort.MaxValue)] public int width = 100;
+    [SerializeField, Range(1, ushort.MaxValue)] public int height = 100;
+
+    [SerializeField] InputHandler input;
 
     public bool[,] isOccupied;
-    List<Particle> particles = new List<Particle>();
+    [HideInInspector] public List<Particle> particles = new List<Particle>();
     Texture2D texture;
 
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        isOccupied = new bool[width, height];
-        
-        // Create and apply texture
-        texture = new Texture2D(width, height);
-        texture.filterMode = FilterMode.Point;
-        GetComponent<MeshRenderer>().material.SetTexture("main_tex", texture);
-
-        // Reference this simulation to all particle types
-        foreach (var particleType in simulatedParticles) {
-            particleType.SetSimulation(this);
-        }
-    }
 
     void FixedUpdate()
     {
         Color[] color = new Color[width * height];
-        particles.Add(new Particle(50, 99, 0));
-        particles.Add(new Particle(70, 99, 1));
-        particles.Add(new Particle(72, 99, 1));
+
 
         foreach (var particle in particles) {
             ParticleType particleType = simulatedParticles[particle.type];
@@ -53,6 +37,19 @@ public class Simulation : MonoBehaviour
         texture.Apply(false);
     }
     
+    void OnEnable() {
+        isOccupied = new bool[width, height];
+        
+        // Create and apply texture
+        texture = new Texture2D(width, height);
+        texture.filterMode = FilterMode.Point;
+        GetComponent<MeshRenderer>().material.SetTexture("main_tex", texture);
+
+        // Reference this simulation to all particle types
+        foreach (var particleType in simulatedParticles) {
+            particleType.SetSimulation(this);
+        }
+    }
 
     public bool IsPositionValid(int x, int y) 
         => x >= 0 && y >= 0 && x < width && y < height && !isOccupied[x, y];

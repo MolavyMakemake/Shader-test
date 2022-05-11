@@ -13,18 +13,35 @@ public abstract class ParticleType : ScriptableObject
 
     protected void ApplyGravity(Particle p) {
         p.vY -= simulation.gravityScale;
-        int sign = (int)Mathf.Sign(p.vY);
-        for (int i = 1; i < Mathf.Abs(p.vY) + 1; i ++) {
+
+        int d = DistanceY(p, p.vY);
+        if (d != p.vY) p.vY = 0;
+
+        p.y += (ushort)d;
+    }
+
+    protected int DistanceX(Particle p, int x) {
+        int sign = (int)Mathf.Sign(x);
+        for (int i = 1; i <= Mathf.Abs(x); i ++) {
+
+            int dX = sign * i;
+            if (!simulation.IsPositionValid(p.x + dX, p.y)) {
+                return dX - sign;
+            }
+        }
+        return x;
+    }
+
+    protected int DistanceY(Particle p, int y) {
+        int sign = (int)Mathf.Sign(y);
+        for (int i = 1; i <= Mathf.Abs(y); i ++) {
 
             int dY = sign * i;
             if (!simulation.IsPositionValid(p.x, p.y + dY)) {
-                p.y = (ushort)(p.y + dY - sign);
-                p.vY = 0;
-                return;
+                return dY - sign;
             }
         }
-        p.y = (ushort)(p.y + p.vY);
+        return y;
     }
-
     public abstract void PhysicsStep(Particle p);
 }
